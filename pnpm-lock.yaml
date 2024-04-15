@@ -6,6 +6,7 @@ specifiers:
   '@babel/preset-typescript': ^7.24.1
   '@dnd-kit/core': ^6.1.0
   '@radix-ui/react-context-menu': ^2.1.5
+  '@radix-ui/react-slot': ^1.0.2
   '@testing-library/jest-dom': ^6.4.2
   '@testing-library/react': ^15.0.0
   '@types/jest': ^29.5.12
@@ -36,6 +37,7 @@ specifiers:
 dependencies:
   '@dnd-kit/core': 6.1.0_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-context-menu': 2.1.5_cc55nvzwlsvwrl3jhzkkbmzrbi
+  '@radix-ui/react-slot': 1.0.2_5vltyd222judxlmi5ppkhudyhq
   class-variance-authority: 0.7.0
   clsx: 2.1.0
   lucide-react: 0.368.0_react@18.2.0
@@ -6555,6 +6557,14 @@ packages:
       tslib: 2.6.2
     dev: false
 
+  /use-sync-external-store/1.2.0_react@18.2.0:
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
@@ -6803,3 +6813,23 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zustand/4.5.2_5vltyd222judxlmi5ppkhudyhq:
+    resolution: {integrity: sha512-2cN1tPkDVkwCy5ickKrI7vijSjPksFRfqS6237NzT0vqSsztTNnQdHw9mmN7uBdk3gceVXU0a+21jFzFzAc9+g==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@types/react': '>=16.8'
+      immer: '>=9.0.6'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.2.75
+      react: 18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
