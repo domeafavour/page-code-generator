@@ -31,6 +31,7 @@ specifiers:
   typescript: ^5.4.5
   vite: ^5.2.0
   vite-tsconfig-paths: ^4.3.2
+  zustand: ^4.5.2
 
 dependencies:
   '@dnd-kit/core': 6.1.0_biqbaboplfbrettd7655fr4n2y
@@ -42,6 +43,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   tailwind-merge: 2.2.2
   tailwindcss-animate: 1.0.7_tailwindcss@3.4.3
+  zustand: 4.5.2_5vltyd222judxlmi5ppkhudyhq
 
 devDependencies:
   '@babel/plugin-transform-react-jsx': 7.23.4
