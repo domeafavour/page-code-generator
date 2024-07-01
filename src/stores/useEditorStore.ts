@@ -1,85 +1,103 @@
-import { EditingEntity } from '@/typings';
-import { arrayPush, ensureArray } from '@/utils/array';
-import { generateId } from '@/utils/generateId';
-import { combine } from 'zustand/middleware';
-import { createWithEqualityFn } from 'zustand/traditional';
+import { EditingEntity } from "@/typings";
+import { arrayPush, ensureArray } from "@/utils/array";
+import { generateId } from "@/utils/generateId";
+import { combine } from "zustand/middleware";
+import { createWithEqualityFn } from "zustand/traditional";
 
-export const useEditorStore = createWithEqualityFn(
-  combine(
-    {
-      entities: {} as Record<string, EditingEntity>,
-      childIds: {} as Record<string, string[]>,
-      rootIds: [] as string[],
-    },
-    (set, get) => ({
-      addNode: (payload: {
-        parentId: string | null;
-        type: EditingEntity['type'];
-        component: string;
-      }) => {
-        set((state) => {
-          const { parentId, component, type } = payload;
-          if (parentId && !state.entities[parentId]) {
-            return state;
-          }
-          const id = generateId();
-          // rootId: id === null
-          return {
-            ...state,
-            rootIds: parentId ? state.rootIds : arrayPush(state.rootIds, id),
-            childIds: {
-              ...state.childIds,
-              ...(parentId
-                ? { [parentId]: [...state.childIds[parentId], id] }
-                : {}),
-              [id]: [],
-            },
-            entities: {
-              ...state.entities,
-              [id]: {
-                type,
-                component,
-              },
-            },
-          };
-        });
+const initialState = {
+  editingId: null as string | null,
+  entities: {} as Record<string, EditingEntity>,
+  childIds: {} as Record<string, string[]>,
+  rootIds: [] as string[],
+};
+
+export const useEditorStore = createWithEqualityFn(createEditorStore());
+
+interface NewEntityPayload {
+  parentId: string | null;
+  type: EditingEntity["type"];
+  component: string;
+}
+
+export function createEditorStore() {
+  return combine(initialState, (set, get) => {
+    function hasEntity(id: string) {
+      return id in get().entities;
+    }
+
+    return {
+      setEditingId: (editingId: string) => {
+        set({ editingId });
       },
 
-      removeNode: (id: string, parentId: string | null) => {
-        set((state) => {
-          let entity = state.entities[id];
-          if (!entity) {
-            return state;
-          }
+      getEditingId: () => get().editingId,
 
-          const newEntities = { ...state.entities };
-          delete newEntities[id];
+      clearEditingId: () => {
+        set({ editingId: null });
+      },
 
-          const newChildIds = { ...state.childIds };
-          delete newChildIds[id];
+      addEntity: <T extends NewEntityPayload>(
+        payload: T
+      ): T["parentId"] extends null ? string : string | null => {
+        const { component, parentId, type } = payload;
+        if (parentId && !hasEntity(parentId)) {
+          // @ts-ignore
+          return null;
+        }
 
-          let newRootIds = state.rootIds;
+        const id = generateId();
+        let { rootIds, entities, childIds } = get();
+        if (!parentId) {
+          rootIds = arrayPush(rootIds, id);
+        } else {
+          childIds = {
+            ...childIds,
+            [parentId]: arrayPush(ensureArray(childIds[parentId]), id),
+          };
+        }
+        entities = { ...entities, [id]: { id, component, type } };
+        set({
+          rootIds,
+          entities,
+          childIds,
+        });
+        return id;
+      },
 
-          if (parentId) {
-            newChildIds[parentId] = newChildIds[parentId].filter(
-              (i) => i !== id
-            );
+      removeEntity: (id: string, parentId: string | null) => {
+        const { rootIds, childIds, entities } = get();
+
+        if (!hasEntity(id)) {
+          return;
+        }
+
+        const newRootIds = new Set(rootIds);
+        const newEntities = { ...entities };
+        const idToChildIds = { ...childIds };
+
+        function remove(idToRemove: string, upId: string | null) {
+          delete newEntities[idToRemove];
+          if (!upId) {
+            newRootIds.delete(idToRemove);
           } else {
-            newRootIds = newRootIds.filter((i) => i !== id);
+            idToChildIds[upId] = idToChildIds[upId].filter(
+              (childId) => childId !== idToRemove
+            );
           }
+          idToChildIds[idToRemove]?.forEach((childId) => {
+            remove(childId, idToRemove);
+          });
+          delete idToChildIds[idToRemove];
+        }
 
-          return {
-            ...state,
-            entities: newEntities,
-            childIds: newChildIds,
-            rootIds: newRootIds,
-          };
+        remove(id, parentId);
+
+        set({
+          entities: newEntities,
+          childIds: idToChildIds,
+          rootIds: [...newRootIds],
         });
       },
-      getChildIds: (parentId: string | null) => {
-        const { rootIds, childIds } = get();
-        return parentId ? ensureArray(childIds[parentId]) : rootIds;
-      },
-    })
-  )
-);
+    };
+  });
+}
