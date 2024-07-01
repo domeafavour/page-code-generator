@@ -1,10 +1,10 @@
-import { useDraggable } from '@dnd-kit/core';
-import React from 'react';
+import React from "react";
+import { useDraggable } from "./useDraggable";
 
 export type DraggableData = {
   id: string;
   name: string;
-  type: 'component' | 'layout';
+  type: "component" | "layout";
 };
 
 export function Draggable<T extends DraggableData>({
@@ -12,25 +12,10 @@ export function Draggable<T extends DraggableData>({
   data,
   children,
 }: React.PropsWithChildren<{ className?: string; data: T }>) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: data.id,
-    data,
-  });
-
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      }
-    : undefined;
+  const { ref } = useDraggable<HTMLDivElement, DraggableData>(data);
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={className}
-      {...listeners}
-      {...attributes}
-    >
+    <div ref={ref} className={className}>
       {children}
     </div>
   );

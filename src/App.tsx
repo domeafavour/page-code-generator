@@ -1,4 +1,5 @@
 import { Draggable } from "./components/Draggable";
+import { Droppable } from "./components/Droppable";
 import { Flex } from "./components/Flex";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { EditorContainer } from "./containers/EditorContainer";
@@ -35,26 +36,21 @@ function App() {
         </CardHeader>
         <CardContent>
           <Flex gap={8} flexDirection="column">
-            <Draggable
-              data={{
-                id: "component/text",
-                name: "text",
-                type: "component",
-              }}
-              className="bg-gray-500"
+            <Droppable
+              droppableId="component/text"
+              className={(p) => (p.isOver ? "outline outline-2" : "")}
             >
-              Text
-            </Draggable>
-            <Draggable
-              data={{
-                id: "component/button",
-                name: "button",
-                type: "component",
-              }}
-              className="bg-gray-500"
-            >
-              Button
-            </Draggable>
+              <Draggable
+                data={{
+                  id: "component/text",
+                  name: "text",
+                  type: "component",
+                }}
+                className="bg-gray-500"
+              >
+                Text
+              </Draggable>
+            </Droppable>
           </Flex>
         </CardContent>
       </Card>
