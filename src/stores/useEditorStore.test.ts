@@ -144,3 +144,34 @@ describe("editorStore.removeEntity", () => {
     expect(entities[textId2]).toBeUndefined();
   });
 });
+
+describe("editorStore.updateEntity", () => {
+  it("should return null when id is not in entities", () => {
+    const { updateEntity } = store.getState();
+    expect(updateEntity("5", { component: "Text" })).toBeNull();
+  });
+
+  it("should update the entity with the new values", () => {
+    const { addEntity, updateEntity } = store.getState();
+    const id = addEntity({
+      parentId: null,
+      component: "Text",
+      type: "component",
+    })!;
+    updateEntity(id, { component: "Button" });
+    expect(store.getState().entities[id].component).toBe("Button");
+  });
+
+  it("should not change the entities when no values are provided", () => {
+    const { addEntity, updateEntity } = store.getState();
+    const id = addEntity({
+      parentId: null,
+      component: "Text",
+      type: "component",
+    });
+    const { entities: previousEntities } = store.getState();
+
+    updateEntity(id, {});
+    expect(store.getState().entities).toBe(previousEntities);
+  });
+});

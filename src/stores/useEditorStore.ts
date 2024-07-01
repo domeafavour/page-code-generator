@@ -98,6 +98,24 @@ export function createEditorStore() {
           rootIds: [...newRootIds],
         });
       },
+
+      updateEntity: (
+        id: string,
+        values: Partial<EditingEntity>
+      ): EditingEntity | null => {
+        if (!hasEntity(id) || !Object.keys(values).length) {
+          return null;
+        }
+
+        const { entities } = get();
+        const newEntities = {
+          ...entities,
+          [id]: { ...entities[id], ...values },
+        };
+        set({ entities: newEntities });
+
+        return newEntities[id];
+      },
     };
   });
 }
