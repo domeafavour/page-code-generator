@@ -4,7 +4,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { PreviewComponentMap } from "@/typings";
-import React from "react";
+import React, { useContext } from "react";
 
 type ResizablePanelGroupProps = React.ComponentPropsWithoutRef<
   typeof ResizablePanelGroup
@@ -19,6 +19,12 @@ interface Props extends Omit<ResizablePanelGroupProps, "direction"> {
 
 export type { Props as EditorContainerProps };
 
+const ConfigContext = React.createContext<PreviewComponentMap>({});
+
+export function useEditorConfig() {
+  return useContext(ConfigContext);
+}
+
 export function EditorContainer({
   children,
   className,
@@ -29,7 +35,7 @@ export function EditorContainer({
   ...props
 }: Props) {
   return (
-    <>
+    <ConfigContext.Provider value={config}>
       {toolbar}
       <ResizablePanelGroup direction="horizontal" {...props}>
         <ResizablePanel defaultSize={25}>{left}</ResizablePanel>
@@ -38,6 +44,6 @@ export function EditorContainer({
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={25}>{right}</ResizablePanel>
       </ResizablePanelGroup>
-    </>
+    </ConfigContext.Provider>
   );
 }
