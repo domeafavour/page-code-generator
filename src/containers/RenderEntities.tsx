@@ -1,10 +1,11 @@
-import { NoPreviewComponent } from '@/components/NoPreviewComponent';
-import { RootDroppable } from '@/components/RootDroppable';
-import { previewComponentsMap } from '@/previewComponentsMap';
-import { useEditorStore } from '@/stores';
-import { genDefaultProps } from '@/utils/genDefaultProps';
-import { ComponentWrapper } from './ComponentWrapper';
-import { LayoutWrapper } from './LayoutWrapper';
+import { NoPreviewComponent } from "@/components/NoPreviewComponent";
+import { RootDroppable } from "@/components/RootDroppable";
+import { previewComponentsMap } from "@/previewComponentsMap";
+import { useEditorStore } from "@/stores";
+import { genDefaultProps } from "@/utils/genDefaultProps";
+import { ComponentWrapper } from "./ComponentWrapper";
+import { LayoutWrapper } from "./LayoutWrapper";
+import { useChildIds } from "@/hooks/useChildIds";
 
 export interface RenderEntityProps {
   id: string;
@@ -21,7 +22,7 @@ export function RenderEntity({ id, parentId }: RenderEntityProps) {
 
   const defaultProps = genDefaultProps(preview.props);
 
-  if (entity.type === 'layout') {
+  if (entity.type === "layout") {
     return (
       <LayoutWrapper key={id} id={id} parentId={parentId}>
         <preview.component {...defaultProps}>
@@ -42,7 +43,7 @@ export interface RenderEntitiesProps {
 }
 
 export function RenderEntities({ parentId }: RenderEntitiesProps) {
-  const childIds = useEditorStore((store) => store.getChildIds(parentId));
+  const childIds = useChildIds(parentId);
   return childIds.map((id) => (
     <RenderEntity key={id} id={id} parentId={parentId} />
   ));
