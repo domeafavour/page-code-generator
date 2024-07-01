@@ -33,9 +33,9 @@ export function EditorContainer({
       {toolbar}
       <ResizablePanelGroup direction="horizontal" {...props}>
         <ResizablePanel defaultSize={25}>{left}</ResizablePanel>
-        <ResizableHandle />
+        <ResizableHandle withHandle />
         <ResizablePanel defaultSize={50}>{children}</ResizablePanel>
-        <ResizableHandle />
+        <ResizableHandle withHandle />
         <ResizablePanel defaultSize={25}>{right}</ResizablePanel>
       </ResizablePanelGroup>
     </>
