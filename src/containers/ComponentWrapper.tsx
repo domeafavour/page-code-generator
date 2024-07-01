@@ -12,7 +12,7 @@ export function ComponentWrapper({
   id,
   parentId,
 }: React.PropsWithChildren<{ id: string; parentId: string | null }>) {
-  const removeNode = useEditorStore((store) => store.removeNode);
+  const removeNode = useEditorStore((store) => store.removeEntity);
 
   return (
     <ContextMenu>

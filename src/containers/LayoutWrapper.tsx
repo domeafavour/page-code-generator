@@ -13,7 +13,7 @@ export function LayoutWrapper({
   id,
   parentId,
 }: React.PropsWithChildren<{ id: string; parentId: string | null }>) {
-  const removeNode = useEditorStore((store) => store.removeNode);
+  const removeEntity = useEditorStore((store) => store.removeEntity);
   return (
     <ContextMenu>
       <ContextMenuTrigger>
@@ -22,7 +22,7 @@ export function LayoutWrapper({
           <Droppable
             droppableId={id}
             className={({ isOver }) =>
-              cn('w-full h-9', isOver && 'bg-orange-300')
+              cn("w-full h-9", isOver && "bg-orange-300")
             }
           >
             <small>drag here</small>
@@ -33,7 +33,7 @@ export function LayoutWrapper({
         <ContextMenuItem>Layout - {id}</ContextMenuItem>
         <ContextMenuItem
           onClick={() => {
-            removeNode(id, parentId);
+            removeEntity(id, parentId);
           }}
         >
           Delete
