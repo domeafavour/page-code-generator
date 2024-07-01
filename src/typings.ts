@@ -1,4 +1,8 @@
-export type EditingEntity = { type: 'component' | 'layout'; component: string };
+export type EditingEntity = {
+  id: string;
+  type: "component" | "layout";
+  component: string;
+};
 
 export type PropEditorComponent<V> = React.ComponentType<{
   value?: V;
