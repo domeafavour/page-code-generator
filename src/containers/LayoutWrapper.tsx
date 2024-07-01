@@ -20,7 +20,6 @@ export function LayoutWrapper({
         <div className="flex flex-col gap-2 items-start hover:bg-gray-200">
           {children}
           <Droppable
-            droppableId={id}
             className={({ isOver }) =>
               cn("w-full h-9", isOver && "bg-orange-300")
             }

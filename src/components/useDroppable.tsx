@@ -2,7 +2,15 @@ import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 
-export function useDroppable<T extends HTMLElement>() {
+export function useDroppable<
+  T extends HTMLElement,
+  D extends Record<string, unknown>
+>(onDrop?: (data: D) => void) {
+  const latestOnDropRef = useRef(onDrop);
+  useEffect(() => {
+    latestOnDropRef.current = onDrop;
+  });
+
   const [isOver, setIsOver] = useState(false);
   const ref = useRef<T | null>(null);
   useEffect(() => {
@@ -17,8 +25,8 @@ export function useDroppable<T extends HTMLElement>() {
         setIsOver(false);
       },
       onDrop: (args) => {
-        console.log(args);
         setIsOver(false);
+        latestOnDropRef.current?.(args.source.data as D);
       },
     });
     return cleanup;
