@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/resizable";
 import { PreviewComponentMap } from "@/typings";
 import React, { useContext } from "react";
+import invariant from "tiny-invariant";
 
 type ResizablePanelGroupProps = React.ComponentPropsWithoutRef<
   typeof ResizablePanelGroup
@@ -19,10 +20,12 @@ interface Props extends Omit<ResizablePanelGroupProps, "direction"> {
 
 export type { Props as EditorContainerProps };
 
-const ConfigContext = React.createContext<PreviewComponentMap>({});
+const ConfigContext = React.createContext<PreviewComponentMap | null>(null);
 
 export function useEditorConfig() {
-  return useContext(ConfigContext);
+  const context = useContext(ConfigContext);
+  invariant(context);
+  return context;
 }
 
 export function EditorContainer({
