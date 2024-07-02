@@ -1,7 +1,7 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { useEditorStore } from "@/stores";
+import { useEditingValues } from "../hooks/useEditingValues";
 import { useEditorConfig } from "./EditorContainer";
-import { useEditingValues } from "./useEditingValues";
 
 export function EditingPropsEditor() {
   const editingValues = useEditingValues();
