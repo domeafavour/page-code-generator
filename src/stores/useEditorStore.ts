@@ -4,7 +4,7 @@ import { generateId } from "@/utils/generateId";
 import { combine } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
-type EditingPropsValue = Record<string, any>;
+export type EditingPropsValue = Record<string, any>;
 
 const initialState = {
   editingId: null as string | null,
@@ -60,7 +60,7 @@ export function createEditorStore() {
           };
         }
         entities = { ...entities, [id]: { id, component, type } };
-        editingProps = { ...entities, [id]: initialProps ?? {} };
+        editingProps = { ...editingProps, [id]: initialProps ?? {} };
         set({
           rootIds,
           entities,
