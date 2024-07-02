@@ -1,8 +1,15 @@
-import { cn } from '@/lib/utils';
-import { PropEditorProps } from '@/typings';
-import React from 'react';
-import { TextPropEditor } from './TextPropEditor';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { cn } from "@/lib/utils";
+import { PropEditorProps } from "@/typings";
+import React from "react";
+import { NumberPropEditor } from "./NumberPropEditor";
+import { TextPropEditor } from "./TextPropEditor";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 interface ConfigurableProps {
   flexDirection?: React.CSSProperties["flexDirection"];
@@ -62,3 +69,5 @@ export function FlexDirectionEditor(
 }
 
 export const AlignItemsEditor = TextPropEditor;
+
+export const GapEditor = NumberPropEditor;
