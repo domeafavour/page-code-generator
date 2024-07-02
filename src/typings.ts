@@ -1,6 +1,8 @@
+type ComponentType = "component" | "layout";
+
 export type EditingEntity = {
   id: string;
-  type: "component" | "layout";
+  type: ComponentType;
   component: string;
 };
 
@@ -21,6 +23,7 @@ export type PreviewComponentMap<K extends string = string> = Record<
   K,
   {
     title: string;
+    type: ComponentType;
     component: React.ComponentType<any>;
     props?: Record<string, EditPropsDef<any>>;
   }
