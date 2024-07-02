@@ -19,14 +19,16 @@ export type EditPropsDef<V> = {
   editor: PropEditorComponent<V>;
 };
 
+export interface PreviewComponent {
+  title: string;
+  type: ComponentType;
+  component: React.ComponentType<any>;
+  props?: Record<string, EditPropsDef<any>>;
+}
+
 export type PreviewComponentMap<K extends string = string> = Record<
   K,
-  {
-    title: string;
-    type: ComponentType;
-    component: React.ComponentType<any>;
-    props?: Record<string, EditPropsDef<any>>;
-  }
+  PreviewComponent
 >;
 
 export type ConfigurablePropsMap<T extends Record<string, any>> = {
