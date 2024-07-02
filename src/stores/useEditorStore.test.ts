@@ -62,6 +62,16 @@ describe("editorStore.addEntity", () => {
     const id = addEntity({ parentId, component: "Text", type: "component" })!;
     expect(store.getState().childIds[parentId].includes(id));
   });
+
+  it('the editingProps of new entity should be an empty object when "initialProps" is not provided', () => {
+    const { addEntity } = store.getState();
+    const id = addEntity({
+      parentId: null,
+      component: "Text",
+      type: "component",
+    })!;
+    expect(store.getState().editingProps[id]).toEqual({});
+  });
 });
 
 describe("editorStore.removeEntity", () => {
@@ -173,5 +183,29 @@ describe("editorStore.updateEntity", () => {
 
     updateEntity(id, {});
     expect(store.getState().entities).toBe(previousEntities);
+  });
+});
+
+describe("editorStore.updateEditingProps", () => {
+  it("editingProps should not change when id is not in entities", () => {
+    const { updateEditingProps } = store.getState();
+    const { editingProps } = store.getState();
+    updateEditingProps("5", { children: "hi" });
+    expect(store.getState().editingProps).toBe(editingProps);
+  });
+
+  it("editingProps should be merged by props provided", () => {
+    const { updateEditingProps, addEntity } = store.getState();
+    const newEntityId = addEntity({
+      parentId: null,
+      component: "Flex",
+      type: "layout",
+      initialProps: { gap: 8 },
+    });
+    updateEditingProps(newEntityId, { alignItems: "center" });
+    expect(store.getState().editingProps[newEntityId]).toEqual({
+      gap: 8,
+      alignItems: "center",
+    });
   });
 });

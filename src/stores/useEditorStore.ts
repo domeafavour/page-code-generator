@@ -4,11 +4,14 @@ import { generateId } from "@/utils/generateId";
 import { combine } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
+type EditingPropsValue = Record<string, any>;
+
 const initialState = {
   editingId: null as string | null,
   entities: {} as Record<string, EditingEntity>,
   childIds: {} as Record<string, string[]>,
   rootIds: [] as string[],
+  editingProps: {} as Record<string, EditingPropsValue>,
 };
 
 export const useEditorStore = createWithEqualityFn(createEditorStore());
@@ -17,6 +20,7 @@ interface NewEntityPayload {
   parentId: string | null;
   type: EditingEntity["type"];
   component: string;
+  initialProps?: EditingPropsValue;
 }
 
 export function createEditorStore() {
@@ -39,14 +43,14 @@ export function createEditorStore() {
       addEntity: <T extends NewEntityPayload>(
         payload: T
       ): T["parentId"] extends null ? string : string | null => {
-        const { component, parentId, type } = payload;
+        const { component, parentId, type, initialProps } = payload;
         if (parentId && !hasEntity(parentId)) {
           // @ts-ignore
           return null;
         }
 
         const id = generateId();
-        let { rootIds, entities, childIds } = get();
+        let { rootIds, entities, childIds, editingProps } = get();
         if (!parentId) {
           rootIds = arrayPush(rootIds, id);
         } else {
@@ -56,12 +60,27 @@ export function createEditorStore() {
           };
         }
         entities = { ...entities, [id]: { id, component, type } };
+        editingProps = { ...entities, [id]: initialProps ?? {} };
         set({
           rootIds,
           entities,
           childIds,
+          editingProps,
         });
         return id;
+      },
+
+      updateEditingProps: (id: string, props: Partial<EditingPropsValue>) => {
+        if (!hasEntity(id)) {
+          return;
+        }
+        set((state) => ({
+          ...state,
+          editingProps: {
+            ...state.editingProps,
+            [id]: { ...state.editingProps[id], ...props },
+          },
+        }));
       },
 
       removeEntity: (id: string, parentId: string | null) => {
