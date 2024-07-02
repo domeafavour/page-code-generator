@@ -1,10 +1,13 @@
+import { DraggableData } from "@/components/Draggable";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { useEditorStore } from "@/stores";
 import { PreviewComponentMap } from "@/typings";
-import React, { useContext } from "react";
+import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import React, { useContext, useEffect } from "react";
 import invariant from "tiny-invariant";
 
 type ResizablePanelGroupProps = React.ComponentPropsWithoutRef<
@@ -37,6 +40,23 @@ export function EditorContainer({
   right,
   ...props
 }: Props) {
+  const addEntity = useEditorStore((store) => store.addEntity);
+  useEffect(
+    () =>
+      monitorForElements({
+        onDrop: ({ location, source }) => {
+          if (location.current.dropTargets.length === 1) {
+            const draggableData = source.data as DraggableData;
+            addEntity({
+              component: draggableData.name,
+              parentId: null,
+              type: draggableData.type,
+            });
+          }
+        },
+      }),
+    [],
+  );
   return (
     <ConfigContext.Provider value={config}>
       {toolbar}
