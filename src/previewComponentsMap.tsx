@@ -1,23 +1,30 @@
+import React from "react";
 import {
   AlignItemsEditor,
   Flex,
   FlexConfigurableProps,
   FlexDirectionEditor,
-} from './components/Flex';
-import { NumberPropEditor } from './components/NumberPropEditor';
-import { Text } from './components/Text';
-import { Button } from './components/ui/button';
-import { ConfigurablePropsMap, PreviewComponentMap } from './typings';
+} from "./components/Flex";
+import { NumberPropEditor } from "./components/NumberPropEditor";
+import { Text } from "./components/Text";
+import { Button } from "./components/ui/button";
+import { ConfigurablePropsMap, PreviewComponentMap } from "./typings";
 
 // TODO: Provider
 export const previewComponentsMap: PreviewComponentMap = {
+  fragment: {
+    title: "Fragment",
+    component: React.Fragment,
+    type: "layout",
+  },
   flex: {
-    title: 'Flex',
+    title: "Flex",
     component: Flex,
+    type: "layout",
     props: {
       flexDirection: {
         required: false,
-        default: 'row',
+        default: "row",
         editor: FlexDirectionEditor,
       },
       gap: {
@@ -27,17 +34,19 @@ export const previewComponentsMap: PreviewComponentMap = {
       },
       alignItems: {
         required: false,
-        default: 'stretch',
+        default: "stretch",
         editor: AlignItemsEditor,
       },
     } satisfies ConfigurablePropsMap<FlexConfigurableProps>,
   },
   text: {
-    title: 'Text',
+    title: "Text",
+    type: "component",
     component: Text,
   },
   button: {
-    title: 'Button',
+    title: "Button",
+    type: "component",
     component: Button,
   },
 };
