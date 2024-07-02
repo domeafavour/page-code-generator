@@ -4,9 +4,10 @@ import {
   Flex,
   FlexConfigurableProps,
   FlexDirectionEditor,
+  GapEditor,
 } from "./components/Flex";
-import { NumberPropEditor } from "./components/NumberPropEditor";
 import { Text } from "./components/Text";
+import { TextPropEditor } from "./components/TextPropEditor";
 import { Button } from "./components/ui/button";
 import { ConfigurablePropsMap, PreviewComponentMap } from "./typings";
 
@@ -30,7 +31,7 @@ export const previewComponentsMap: PreviewComponentMap = {
       gap: {
         required: false,
         default: 8,
-        editor: NumberPropEditor,
+        editor: GapEditor,
       },
       alignItems: {
         required: false,
@@ -48,5 +49,12 @@ export const previewComponentsMap: PreviewComponentMap = {
     title: "Button",
     type: "component",
     component: Button,
+    props: {
+      children: {
+        required: false,
+        default: "<button>",
+        editor: TextPropEditor,
+      },
+    },
   },
 };
