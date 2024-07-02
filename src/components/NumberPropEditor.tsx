@@ -1,8 +1,9 @@
-import { PropEditorProps } from '@/typings';
+import { PropEditorProps } from "@/typings";
+import { Input } from "./ui/input";
 
 export function NumberPropEditor({ value, onChange }: PropEditorProps<number>) {
   return (
-    <input
+    <Input
       type="number"
       value={value}
       onChange={(e) => onChange?.(+e.target.value)}

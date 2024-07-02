@@ -1,5 +1,6 @@
-import { PropEditorProps } from '@/typings';
+import { PropEditorProps } from "@/typings";
+import { Input } from "./ui/input";
 
 export function TextPropEditor({ value, onChange }: PropEditorProps<string>) {
-  return <input value={value} onChange={(e) => onChange?.(e.target.value)} />;
+  return <Input value={value} onChange={(e) => onChange?.(e.target.value)} />;
 }
