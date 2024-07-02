@@ -41,21 +41,23 @@ export function EditorContainer({
   ...props
 }: Props) {
   const addEntity = useEditorStore((store) => store.addEntity);
+  const setEditingId = useEditorStore((store) => store.setEditingId);
   useEffect(
     () =>
       monitorForElements({
         onDrop: ({ location, source }) => {
           if (location.current.dropTargets.length === 1) {
             const draggableData = source.data as DraggableData;
-            addEntity({
+            const newEntityId = addEntity({
               component: draggableData.name,
               parentId: null,
               type: draggableData.type,
             });
+            setEditingId(newEntityId);
           }
         },
       }),
-    [],
+    []
   );
   return (
     <ConfigContext.Provider value={config}>

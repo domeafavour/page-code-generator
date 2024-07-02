@@ -1,44 +1,34 @@
-import { Flex } from "@/components/Flex";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useRootEntities } from "@/hooks/useRootEntities";
 import { useEditorStore } from "@/stores";
-import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { useEffect, useRef } from "react";
-import invariant from "tiny-invariant";
+import React from "react";
+import { AddedDroppable } from "./AddedDroppable";
+import { useEditorConfig } from "./EditorContainer";
 
 interface Props {}
 
 export type { Props as AddedComponentsProps };
 
 export function AddedComponents() {
-  const ref = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    const element = ref.current;
-    invariant(element);
-    return dropTargetForElements({
-      element,
-    });
-  }, []);
-
-  const rootEntities = useEditorStore((store) =>
-    store.rootIds.map((id) => store.entities[id]),
-  );
+  const rootEntities = useRootEntities();
+  const setEditingId = useEditorStore((store) => store.setEditingId);
+  const editorConfig = useEditorConfig();
 
   return (
-    <Card ref={ref}>
-      <CardHeader>
-        <CardTitle>Component</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Flex gap={8} flexDirection="column">
-          {rootEntities.map((entity) => {
-            return (
-              <div key={entity.id} className="bg-gray-500">
-                <pre>{JSON.stringify(entity)}</pre>
-              </div>
-            );
-          })}
-        </Flex>
-      </CardContent>
-    </Card>
+    <AddedDroppable>
+      {rootEntities.map((entity) => {
+        const config = editorConfig[entity.component];
+        return (
+          <div
+            key={entity.id}
+            className="bg-gray-500 cursor-pointer"
+            onClick={() => setEditingId(entity.id)}
+          >
+            {React.createElement(config.component, {
+              children: "hi",
+            })}
+          </div>
+        );
+      })}
+    </AddedDroppable>
   );
 }

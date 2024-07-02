@@ -1,25 +1,34 @@
 import { Draggable } from "@/components/Draggable";
 import { Flex } from "@/components/Flex";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { useEditorConfig } from "./EditorContainer";
 
 interface Props {}
 
 export type { Props as ComponentsSelectorProps };
 
 export function ComponentsSelector() {
+  const config = useEditorConfig();
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Layout</CardTitle>
-      </CardHeader>
-      <CardContent>
+      <CardContent className="pt-6">
         <Flex gap={8} flexDirection="column">
-          <Draggable
-            data={{ id: "layout/flex", name: "flex", type: "layout" }}
-            className="bg-gray-500"
-          >
-            Flex
-          </Draggable>
+          {Object.keys(config).map((key) => {
+            return (
+              <Draggable
+                key={key}
+                data={{
+                  id: config[key].type + "/" + key,
+                  name: key,
+                  type: config[key].type,
+                }}
+                className="bg-gray-500"
+              >
+                {config[key].title}
+              </Draggable>
+            );
+          })}
         </Flex>
       </CardContent>
     </Card>
