@@ -13,6 +13,10 @@ export default defineConfig({
     tsconfigPaths(),
     svgr({
       include: /\.svg$/,
+      svgrOptions: {
+        exportType: "named",
+        titleProp: true,
+      },
     }),
   ],
   test: {
